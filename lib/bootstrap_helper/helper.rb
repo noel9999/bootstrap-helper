@@ -7,10 +7,14 @@ module BootstrapHelper
 
     def notice_message
       flash_messages = []
-      flash.each do |type, message|
+      flash.each do |type, messages|
         type = :success if type == :notice
-        text = content_tag(:div, link_to("x", "#", :class => "close", "data-dismiss" => "alert") + message, :class => "alert fade in alert-#{type}")
-        flash_messages << text if message
+        messages = [messages] unless messages.is_a? Array
+        messages.each do |message|
+          flash_messages << content_tag(:div,
+            link_to("x", "#", :class => "close", "data-dismiss" => "alert") +message,
+            :class => "alert fade in alert-#{type}")
+        end
       end
       flash_messages.join("\n").html_safe
     end
