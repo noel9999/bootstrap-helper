@@ -13,7 +13,7 @@ module BootstrapHelper
 
     module InstanceMethods
       protected
-
+      include ActionView::Helpers::SanitizeHelper
       def set_breadcrumbs
         @breadcrumbs = ["<a href='/'>Home</a>".html_safe]
       end
@@ -22,7 +22,7 @@ module BootstrapHelper
         title ||= @page_title
         url ||= url_for
         if title
-          @breadcrumbs.push("<a href=\"#{url}\">#{title}</a>".html_safe)
+          @breadcrumbs.push("<a href=\"#{sanitize url}\">#{sanitize title}</a>".html_safe)
         end
       end
 
@@ -60,5 +60,5 @@ module BootstrapHelper
       end
     end
   end
-  
+
 end
