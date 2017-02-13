@@ -4,7 +4,7 @@ module BootstrapHelper
       receiver.extend         ClassMethods
       receiver.send :include, InstanceMethods
       receiver.send :helper, Helpers
-      receiver.send :before_filter, :set_breadcrumbs
+      receiver.send :before_action, :set_breadcrumbs
     end
 
     module ClassMethods
