@@ -73,29 +73,16 @@ module BootstrapHelper
 
     # .current will be added to current action, but if you want to add .current to another link, you can set @current = ['/other_link']
     # TODO: hot about render_list( *args )
-    def render_list(list=[], options={})
-      if list.is_a? Hash
-        options = list
-        list = []
-      end
-
+    def render_list(list=[], item_class: 'nav-item', type: 'ul', **options)
       yield(list) if block_given?
-      
-      list_type ||= "ul"
-      
-      if options[:type] 
-        if ["ul", "dl", "ol"].include?(options[:type])
-          list_type = options[:type]
-        end
-      end
 
-      ul = TagNode.new(list_type, :id => options[:id], :class => options[:class] )
+      type = 'ul' unless %w(ul dl ol).include?(type)
+
+      ul = TagNode.new(type, **options)
       ul.addClass("unstyled") if (options[:type] && options[:type] == "unstyled")
 
       list.each_with_index do |content, i|
-        item_class = []
-        item_class << "first" if i == 0
-        item_class << "last" if i == (list.length - 1)
+        this_item_class = item_class.split(' ')
 
         item_content = content
         item_options = {}
@@ -106,7 +93,7 @@ module BootstrapHelper
         end
 
         if item_options[:class]
-          item_class << item_options[:class]
+          this_item_class << item_options[:class]
         end
 
         link = item_content.match(/href=(["'])(.*?)(\1)/)[2] rescue nil
@@ -115,8 +102,8 @@ module BootstrapHelper
           item_class << "active"
         end
 
-        item_class = (item_class.empty?)? nil : item_class.join(" ")
-        ul << li = TagNode.new('li', :class => item_class )
+        this_item_class = (this_item_class.empty?)? nil : this_item_class.join(" ")
+        ul << li = TagNode.new('li', class: this_item_class)
         li << item_content
       end
 
