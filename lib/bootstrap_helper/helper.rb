@@ -109,7 +109,7 @@ module BootstrapHelper
           item_class << item_options[:class]
         end
 
-        link = item_content.match(/href=(["'])(.*?)(\1)/)[2] rescue nil
+        link = item_content.match(/href=(["'])(.*?)(\1)/)[2].gsub /&amp;/, "&" rescue nil
 
         if ( link && current_page?(link) ) || ( @current && @current.include?(link) )
           item_class << "active"
